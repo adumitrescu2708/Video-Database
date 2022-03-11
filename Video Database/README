@@ -1,0 +1,79 @@
+Object Oriented Programming Course
+Homework No 1 - VideosDB
+November 2021
+
+Dumitrescu Alexandra 323 CA
+
+# Table Of Contents
+    1. [Working Environment & Packages]
+    2. [Database Loading & Parsing]
+    3. [Action Loading & Fetching Mechanism]
+
+# Working Environment & Packages
+    > Provided classes for objects in the Database.
+    > Given the inputs parsed from the JSON File, we store and parse
+      information in local classes. Therefore, we propose classes for:
+      1. Actors, Videos, Movies, Series, Users, Database
+      2. Actions - Queries & Commands & Recommendations
+      3. And other utils such as: - Object Loader Layers - Database Loader
+                                                         - Action Loader
+                                                         - Filter Loader
+    > The main actions are described in package <platform>. It contains
+      the Action prototype, the Action Loader Layer and sub packages
+      for all types of actions supported by our platform.
+
+# Database Loading & Parsing
+    > Our Database will keep track of all actors, users, movies and series
+      in the system.
+    > The DatabaseLoader Class returns an instance of the Database parsed
+      from the given Input.
+    > For storing objects, we used:
+        1. Parsing Methods implemented in the DatabaseClass: get[Object]ByName
+        2. Parsing Methods implemented in the Utils sections
+    > When adding entities we use methods for verifying the existance
+      of its attributes. (Ex: When creating an Actor, we can not
+      put in its viewed movie list a movie that doesn't exist in the database)
+
+# Action Loading and Fetching Mechanism
+    > The main attribute of our platform is the action.
+
+    > We started off with an abstract action Class, that will be extended by
+    each action in the system, providing and executioner and a message.
+
+        >> Commands -- extending the Action class with specific behaviour
+        >> Queries --  A query describes a powerful tool that retrieves
+           relevant metadata from the given database, and also filters,
+           validates and sorts data. Due to its relevance, we propose a
+           generic class that allows future improvements on the platform.
+
+           >>> Description: Given a List of Objects, we need a common
+                            behaviour for sorting, validating a property,
+                            filtering the N objects of the list in
+                            a specific order (ascending/descending)
+
+           >>> Behaviour : 1. Obtain the Filtered List from the Initial one
+                 &         2. Obtain the Property Validating List
+               Steps          2.1 This method could be extended to anything,
+                              but in our cases we apply common restrictions
+                              for existence.
+                           3. Sort the List
+                           4. Get correct Order & Get correct Number
+                                 -> Final List
+        >> Recommendations: Given the description above, recommendations can be
+                           represented as queries applied on the list of unseen
+                           videos of a user.
+
+    > Given the simplified inheritance hierarchy presented below, the action
+      loader layer, using polymorphism, simply creates an Action object and
+      defines its type depending on the input. After that, it executes and
+      retrieves the message to the Results JSON array.
+
+                                        +------------+
++---------------+       + ------+       | VideoQuery |     + ----------------+
+| Action        | ----> | Query | ----> | ActorQuery | --> | Recommendations |
++---------------+    |  + ______+       | UserQuery  |     + ----------------+
+| - message      |   |                  +------------+
++----------------+   |   +----------------+
+| + execute()    |   --> | [All] Commands |
+| + getMessage() |       +----------------+
++----------------+
